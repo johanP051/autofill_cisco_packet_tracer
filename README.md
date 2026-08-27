@@ -12,6 +12,16 @@ Con estos scripts, **toda la red se configura y se rotula automáticamente en me
 
 ---
 
+## 🎬 Video Demo de Funcionamiento
+
+¿Quieres ver cómo funciona en la práctica? En este video demostrativo se muestra el flujo real dentro de Packet Tracer: desde la creación del script en el `Script Engine`, la concesión de permisos de seguridad IPC en `General`, hasta la ejecución instantánea y la verificación en la consola `Debug`:
+
+▶️ **[Ver Video Demo en GitHub (demo_autofill_cisco.mp4)](./demo_autofill_cisco.mp4)**
+
+*(Haz clic en el enlace superior para reproducir el video en el reproductor integrado de GitHub o descargarlo).*
+
+---
+
 ## 🚀 Guía Rápida: Cómo Ejecutar un Script en Packet Tracer (En 5 Pasos)
 
 Para que Packet Tracer permita ejecutar el código sin arrojar errores de seguridad (`IPC Call ERROR`), sigue este flujo exacto:
