@@ -14,11 +14,15 @@ Con estos scripts, **toda la red se configura y se rotula automáticamente en me
 
 ## 🎬 Video Demo de Funcionamiento
 
-¿Quieres ver cómo funciona en la práctica? En este video demostrativo se muestra el flujo real dentro de Packet Tracer: desde la creación del script en el `Script Engine`, la concesión de permisos de seguridad IPC en `General`, hasta la ejecución instantánea y la verificación en la consola `Debug`:
+¿Quieres ver cómo funciona en la práctica? A continuación puedes ver el flujo real dentro de Packet Tracer: desde la creación del script en el `Script Engine`, la concesión de permisos de seguridad IPC en `General`, hasta la ejecución instantánea y la verificación en la consola `Debug`:
 
-▶️ **[Ver Video Demo en GitHub (demo_autofill_cisco.mp4)](./demo_autofill_cisco.mp4)**
+<p align="center">
+  <img src="./demo_preview.gif" alt="Demo de Ejecución en Cisco Packet Tracer" width="850">
+</p>
 
-*(Haz clic en el enlace superior para reproducir el video en el reproductor integrado de GitHub o descargarlo).*
+▶️ **[Ver / Descargar Video Completo de 3 min (demo_autofill_cisco.mp4)](./demo_autofill_cisco.mp4)**
+
+*(Haz clic en el enlace superior para reproducir el video completo en alta resolución en el reproductor de GitHub).*
 
 ---
 
