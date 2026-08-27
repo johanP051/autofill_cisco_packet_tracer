@@ -6,7 +6,7 @@
 
 ## 🎯 ¿Qué problema resuelve este proyecto?
 
-Configurar manualmente decenas de computadores en Cisco Packet Tracer (abrir equipo por equipo $\rightarrow$ Desktop $\rightarrow$ IP Configuration $\rightarrow$ escribir IP $\rightarrow$ máscara $\rightarrow$ gateway $\rightarrow$ cerrar $\rightarrow$ rotular la etiqueta en el lienzo) es un proceso lento, aburrido y propenso a errores humanos.
+Configurar manualmente decenas de computadores en Cisco Packet Tracer (abrir equipo por equipo → Desktop → IP Configuration → escribir IP → máscara → gateway → cerrar → rotular la etiqueta en el lienzo) es un proceso lento, aburrido y propenso a errores humanos.
 
 Con estos scripts, **toda la red se configura y se rotula automáticamente en menos de 1 segundo**, directamente desde el motor interno de Packet Tracer (`ipc.network()`), sin necesidad de programas externos ni clics de ratón.
 
@@ -16,13 +16,11 @@ Con estos scripts, **toda la red se configura y se rotula automáticamente en me
 
 ¿Quieres ver cómo funciona en la práctica? A continuación puedes ver el flujo real dentro de Packet Tracer: desde la creación del script en el `Script Engine`, la concesión de permisos de seguridad IPC en `General`, hasta la ejecución instantánea y la verificación en la consola `Debug`:
 
-<p align="center">
-  <img src="./demo_preview.gif" alt="Demo de Ejecución en Cisco Packet Tracer" width="850">
-</p>
+![Demo de Ejecución en Cisco Packet Tracer](https://raw.githubusercontent.com/johanP051/autofill_cisco_packet_tracer/main/demo_preview.gif)
 
-▶️ **[Ver / Descargar Video Completo de 3 min (demo_autofill_cisco.mp4)](./demo_autofill_cisco.mp4)**
+▶️ **[Ver / Descargar Video Completo en HD (demo_autofill_cisco.mp4)](https://github.com/johanP051/autofill_cisco_packet_tracer/raw/main/demo_autofill_cisco.mp4)**
 
-*(Haz clic en el enlace superior para reproducir el video completo en alta resolución en el reproductor de GitHub).*
+*(Haz clic en el enlace superior para reproducir el video completo en alta resolución o descargarlo).*
 
 ---
 
@@ -35,7 +33,7 @@ Para que Packet Tracer permita ejecutar el código sin arrojar errores de seguri
 ```
 
 1. **Abrir el Editor de Scripts:**
-   - En el menú superior de Packet Tracer: **`Extensions` $\rightarrow$ `Scripting` $\rightarrow$ `New PT Script Module...`** (o `Edit File Script Module...`).
+   - En el menú superior de Packet Tracer: **`Extensions` → `Scripting` → `New PT Script Module...`** (o `Edit File Script Module...`).
 2. **Crear el archivo:**
    - Ve a la pestaña **`Script Engine`**.
    - Haz clic en el botón **`+`** (abajo a la izquierda), escribe un nombre (ej. `mi_script.js`) y presiona **OK**.
@@ -108,10 +106,10 @@ var SWITCH_LABEL_STYLE = 1;
 
 En los scripts de IPv4 puedes ajustar fácilmente:
 - **`NETWORK_BASE`:** Define la red base. Por ejemplo:
-  - `"10.0.0.0"` $\rightarrow$ Auto-detecta **Clase A** y asigna máscara `255.0.0.0` (`/8`).
-  - `"172.16.0.0"` $\rightarrow$ Auto-detecta **Clase B** y asigna máscara `255.255.0.0` (`/16`).
-  - `"192.168.1.0"` $\rightarrow$ Auto-detecta **Clase C** y asigna máscara `255.255.255.0` (`/24`).
-- **`AUTO_MASK`:** `true` calcula la máscara por clase. Si tu profesor te pide una máscara personalizada (ej. `/26` $\rightarrow$ `255.255.255.192`), pon `AUTO_MASK = false;` y coloca tu máscara en `CUSTOM_MASK`.
+  - `"10.0.0.0"` → Auto-detecta **Clase A** y asigna máscara `255.0.0.0` (`/8`).
+  - `"172.16.0.0"` → Auto-detecta **Clase B** y asigna máscara `255.255.0.0` (`/16`).
+  - `"192.168.1.0"` → Auto-detecta **Clase C** y asigna máscara `255.255.255.0` (`/24`).
+- **`AUTO_MASK`:** `true` calcula la máscara por clase. Si tu profesor te pide una máscara personalizada (ej. `/26` → `255.255.255.192`), pon `AUTO_MASK = false;` y coloca tu máscara en `CUSTOM_MASK`.
 - **`HOST_START`:** El número del host inicial para los PCs (ej. `2` para empezar en `.2`, dejando `.1` libre para el router).
 - **`ASSIGN_GATEWAY`:** `true` asigna la IP del router a los PCs; `false` deja `0.0.0.0`.
 - **`DNS_SERVER`:** Si el laboratorio tiene un servidor DNS, coloca su IP (ej. `"8.8.8.8"` o `"192.168.1.250"`). Si se deja en `""`, no asigna DNS.
@@ -147,7 +145,7 @@ Ahorra tiempo al diseñar y montar tu topología con estos atajos verificados:
    - En la esquina inferior derecha verás el estado:
      - *Nota:* El primer intento puede salir en `Failed` mientras el router resuelve la tabla ARP. Vuelve a presionar **`P`** y repetir: ahora dirá **`Successful`**.
 2. **Prueba por consola (Command Prompt):**
-   - Entra a cualquier PC $\rightarrow$ **Desktop** $\rightarrow$ **Command Prompt**.
+   - Entra a cualquier PC → **Desktop** → **Command Prompt**.
    - Haz ping a tu propio Gateway:
      ```bash
      ping 192.168.1.1
