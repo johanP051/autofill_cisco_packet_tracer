@@ -1,0 +1,41 @@
+# ==============================================================================
+# Cisco Packet Tracer - Git Ignore
+# ==============================================================================
+
+# Archivos temporales y de bloqueo de Packet Tracer
+*.tmp
+*.temp
+*.~pkt
+*.~pka
+*.~pkz
+*.autosave
+*.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Archivos del sistema y editores
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# ==============================================================================
+# Proyectos y laboratorios universitarios personales (Privados / No compartir)
+# ==============================================================================
+01-fundamentos/
+02-topologias-basicas/
+03-ipv6/
+04-laboratorios-clase/
+Subnetting/
