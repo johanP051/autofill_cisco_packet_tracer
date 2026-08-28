@@ -13,9 +13,13 @@
 // ⚙️ 1. PARÁMETROS VLSM DE LAS TOPOLOGÍAS (Según Laboratorio)
 // ==============================================================================
 var ROOT_SWITCHES = {
+    // Topología Estrella
     "Switch0": { network: "192.168.0.0", startIp: 1, mask: "255.255.255.192", alias: "Subred1" },
+    // Topología Anillo
     "Switch1": { network: "192.168.0.64", startIp: 65, mask: "255.255.255.192", alias: "Subred2" },
+    // Topología Árbol
     "Switch2": { network: "192.168.0.128", startIp: 129, mask: "255.255.255.192", alias: "Subred3" },
+    // Topología Malla
     "Switch3": { network: "192.168.0.192", startIp: 193, mask: "255.255.255.192", alias: "Subred4" },
     // Alias backups for re-runs
     "Subred1": { network: "192.168.0.0", startIp: 1, mask: "255.255.255.192", alias: "Subred1" },
@@ -84,16 +88,31 @@ function formatHostLabel(originalName, ip, style) {
 // Mapea a qué 'Switch Central' (Raíz) pertenece cada Switch de Acceso.
 // ------------------------------------------------------------------------------
 var switchSubnetMap = {}; 
-var rootNames = ["Switch0", "Switch1", "Switch2", "Switch3", "Subred1", "Subred2", "Subred3", "Subred4"]; // Nombres del Backbone
+var rootNames = ["Switch0", "Switch1", "Switch2", "Switch3", "Subred1", "Subred2", "Subred3", "Subred4"];
 
-for (var r = 0; r < rootNames.length; r++) {
-    var rootName = rootNames[r];
-    var rootDevice = net.getDevice(rootName);
+// Buscar dinámicamente los Root Devices aunque tengan corchetes en el nombre
+var rootDevices = [];
+for (var d = 0; d < devCount; d++) {
+    var possibleDev = net.getDeviceAt(d);
+    if (!possibleDev || possibleDev.getType() !== 1) continue;
     
-    if (!rootDevice) {
-        console.log("⚠️ ADVERTENCIA: No se encontró el switch central '" + rootName + "'. Verifica el nombre.");
-        continue;
+    var bName = possibleDev.getName().split(" [")[0].split(" (")[0].split(" - ")[0];
+    bName = bName.replace(/(\(\d+\))+$/g, ""); // Anti-copias
+    
+    if (rootNames.indexOf(bName) > -1) {
+        rootDevices.push({ dev: possibleDev, bName: bName });
     }
+}
+
+if (rootDevices.length === 0) {
+    console.log("⚠️ ADVERTENCIA: No se encontró ningún switch central.");
+}
+
+for (var r = 0; r < rootDevices.length; r++) {
+    var rootDevice = rootDevices[r].dev;
+    var rootName = rootDevice.getName(); // Exact name
+    var bName = rootDevices[r].bName;
+    var rootAlias = ROOT_SWITCHES[bName].alias; // e.g. "Subred1"
     
     // Cola para el BFS (recorrido por niveles)
     var queue = [rootDevice];
@@ -101,13 +120,13 @@ for (var r = 0; r < rootNames.length; r++) {
     var visited = {};
     visited[rootName] = true;
     
-    console.log(">> Rastreando rama de topología a partir de: " + rootName);
+    console.log(">> Rastreando rama de topología a partir de: " + bName);
     
     while (queue.length > 0) {
         var currentSwitch = queue.shift();
         
         // Asignamos el switch actual a la raíz que lo descubrió
-        switchSubnetMap[currentSwitch.getName()] = rootDevices[r].bName;
+        switchSubnetMap[currentSwitch.getName()] = bName;
         
         // Recorrer todos los puertos del switch actual
         for (var p = 0; p < currentSwitch.getPortCount(); p++) {
@@ -118,7 +137,6 @@ for (var r = 0; r < rootNames.length; r++) {
                 var neighborName = neighbor.getName();
                 
                 // CRÍTICO: No cruzar hacia OTROS switches centrales (el backbone en Bus)
-                var isOtherRoot = false;
                 var isOtherRoot = false;
                 for (var i = 0; i < rootDevices.length; i++) {
                     if (rootDevices[i].dev.getName() === neighborName && neighborName !== rootName) {
@@ -198,11 +216,10 @@ for (var i = 0; i < devCount; i++) {
                 console.log("Error configurando " + dev.getName() + ": " + e);
             }
         } else {
-            console.log("⚠️ " + dev.getName() + " está conectado a " + connectedSwitch.getName() + " el cual no tiene ruta hacia ningún Switch Central.");
+            // El usuario fue avisado en caso de switches aislados
         }
     }
 }
-
 
 // ------------------------------------------------------------------------------
 // FASE 3: ROTULADO DE SWITCHES (OPCIONAL)
