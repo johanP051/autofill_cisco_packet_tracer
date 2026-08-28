@@ -13,14 +13,15 @@
 // ⚙️ 1. PARÁMETROS VLSM DE LAS TOPOLOGÍAS (Según Laboratorio)
 // ==============================================================================
 var ROOT_SWITCHES = {
-    // Topología Estrella
-    "Switch0": { network: "192.168.0.0", startIp: 1, mask: "255.255.255.192" },
-    // Topología Anillo
-    "Switch1": { network: "192.168.0.64", startIp: 65, mask: "255.255.255.192" },
-    // Topología Árbol
-    "Switch2": { network: "192.168.0.128", startIp: 129, mask: "255.255.255.192" },
-    // Topología Malla
-    "Switch3": { network: "192.168.0.192", startIp: 193, mask: "255.255.255.192" }
+    "Switch0": { network: "192.168.0.0", startIp: 1, mask: "255.255.255.192", alias: "Subred1" },
+    "Switch1": { network: "192.168.0.64", startIp: 65, mask: "255.255.255.192", alias: "Subred2" },
+    "Switch2": { network: "192.168.0.128", startIp: 129, mask: "255.255.255.192", alias: "Subred3" },
+    "Switch3": { network: "192.168.0.192", startIp: 193, mask: "255.255.255.192", alias: "Subred4" },
+    // Alias backups for re-runs
+    "Subred1": { network: "192.168.0.0", startIp: 1, mask: "255.255.255.192", alias: "Subred1" },
+    "Subred2": { network: "192.168.0.64", startIp: 65, mask: "255.255.255.192", alias: "Subred2" },
+    "Subred3": { network: "192.168.0.128", startIp: 129, mask: "255.255.255.192", alias: "Subred3" },
+    "Subred4": { network: "192.168.0.192", startIp: 193, mask: "255.255.255.192", alias: "Subred4" }
 };
 
 // ==============================================================================
@@ -83,7 +84,7 @@ function formatHostLabel(originalName, ip, style) {
 // Mapea a qué 'Switch Central' (Raíz) pertenece cada Switch de Acceso.
 // ------------------------------------------------------------------------------
 var switchSubnetMap = {}; 
-var rootNames = ["Switch0", "Switch1", "Switch2", "Switch3"]; // Nombres del Backbone
+var rootNames = ["Switch0", "Switch1", "Switch2", "Switch3", "Subred1", "Subred2", "Subred3", "Subred4"]; // Nombres del Backbone
 
 for (var r = 0; r < rootNames.length; r++) {
     var rootName = rootNames[r];
@@ -106,7 +107,7 @@ for (var r = 0; r < rootNames.length; r++) {
         var currentSwitch = queue.shift();
         
         // Asignamos el switch actual a la raíz que lo descubrió
-        switchSubnetMap[currentSwitch.getName()] = rootName;
+        switchSubnetMap[currentSwitch.getName()] = rootDevices[r].bName;
         
         // Recorrer todos los puertos del switch actual
         for (var p = 0; p < currentSwitch.getPortCount(); p++) {
@@ -118,10 +119,14 @@ for (var r = 0; r < rootNames.length; r++) {
                 
                 // CRÍTICO: No cruzar hacia OTROS switches centrales (el backbone en Bus)
                 var isOtherRoot = false;
-                for (var i = 0; i < rootNames.length; i++) {
-                    if (rootNames[i] === neighborName && neighborName !== rootName) {
-                        isOtherRoot = true;
-                        break;
+                var isOtherRoot = false;
+                for (var i = 0; i < rootDevices.length; i++) {
+                    if (rootDevices[i].dev.getName() === neighborName && neighborName !== rootName) {
+                        // Check if it's not actually the same alias 
+                        if (ROOT_SWITCHES[rootDevices[i].bName].alias !== rootAlias) {
+                            isOtherRoot = true;
+                            break;
+                        }
                     }
                 }
                 if (isOtherRoot) continue; // Ignoramos el cable de backbone
@@ -195,6 +200,48 @@ for (var i = 0; i < devCount; i++) {
         } else {
             console.log("⚠️ " + dev.getName() + " está conectado a " + connectedSwitch.getName() + " el cual no tiene ruta hacia ningún Switch Central.");
         }
+    }
+}
+
+
+// ------------------------------------------------------------------------------
+// FASE 3: ROTULADO DE SWITCHES (OPCIONAL)
+// ------------------------------------------------------------------------------
+for (var i = 0; i < devCount; i++) {
+    var dev = net.getDeviceAt(i);
+    if (!dev || dev.getType() !== 1) continue; // Solo switches
+    
+    var rootId = switchSubnetMap[dev.getName()];
+    // Si el switch es uno de los roots, rootId será undefined en el mapa porque el BFS no lo mapea a sí mismo
+    if (!rootId && ROOT_SWITCHES[dev.getName()]) {
+        rootId = dev.getName();
+    }
+    
+    if (rootId) {
+        var subnetConfig = ROOT_SWITCHES[rootId];
+        var baseName = dev.getName().split(" [")[0].split(" (")[0].split(" - ")[0];
+        baseName = baseName.replace(/(\(\d+\))+$/g, ""); // Anti-copias
+        
+        // Si el switch era el root original (Switch0), renombrarlo a Subred1
+        if (baseName === "Switch0" || baseName === "Subred1") baseName = "Subred1";
+        else if (baseName === "Switch1" || baseName === "Subred2") baseName = "Subred2";
+        else if (baseName === "Switch2" || baseName === "Subred3") baseName = "Subred3";
+        else if (baseName === "Switch3" || baseName === "Subred4") baseName = "Subred4";
+        else {
+            // Para los switches de acceso, prefijarlos con el nombre de la subred si no lo tienen
+            if (baseName.indexOf(subnetConfig.alias) === -1) {
+                baseName = subnetConfig.alias + "_" + baseName;
+            }
+        }
+        
+        var newSwName = baseName + " [" + subnetConfig.network + "/26]";
+        
+        try {
+            if (dev.getName() !== newSwName) {
+                dev.setName(newSwName);
+                console.log("Switch Renombrado: " + newSwName);
+            }
+        } catch(e) { }
     }
 }
 
