@@ -43,6 +43,7 @@ console.log("Estilo de rótulo seleccionado: " + LABEL_STYLE);
 // Función auxiliar para formatear la etiqueta del PC según el estilo elegido
 function formatHostLabel(originalName, index, ipv6, style) {
     var baseName = originalName.split(" [")[0].split(" (")[0].split(" - ")[0];
+    baseName = baseName.replace(/(\(\d+\))+$/g, "");
     switch (style) {
         case 1: // Corchetes
             return "PC" + index + " [" + ipv6 + "]";

@@ -68,6 +68,7 @@ function getConnectedDevice(device, portIndex) {
 // ------------------------------------------------------------------------------
 function formatHostLabel(originalName, ip, style) {
     var baseName = originalName.split(" [")[0].split(" (")[0].split(" - ")[0];
+    baseName = baseName.replace(/(\(\d+\))+$/g, "");
     switch (style) {
         case 1: return baseName + " [" + ip + "]";
         case 2: return baseName + " (" + ip + ")";

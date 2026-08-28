@@ -103,6 +103,7 @@ function formatSwitchLabel(originalName, index, subnetStr, style) {
 
 function formatHostLabel(originalName, switchTag, ip, style) {
     var baseName = originalName.split(" [")[0].split(" (")[0].split(" - ")[0];
+    baseName = baseName.replace(/(\(\d+\))+$/g, "");
     switch (style) {
         case 1: return baseName + " [" + ip + "]";
         case 2: return baseName + " (" + ip + ")";
@@ -120,6 +121,7 @@ for (var s = 0; s < devCount; s++) {
     if (!sDev || sDev.getType() !== 1) continue;
 
     var rawName = sDev.getName().split(" [")[0].split(" (")[0].split(" - ")[0];
+    rawName = rawName.replace(/(\(\d+\))+$/g, "");
     var subnetIp = generateIpPerSwitch(NETWORK_BASE, classInfo.networkClass, switchCounter, 0);
     var subnetStr = subnetIp + classInfo.cidr;
     var swLabel = formatSwitchLabel(rawName, switchCounter, subnetStr, SWITCH_LABEL_STYLE);
