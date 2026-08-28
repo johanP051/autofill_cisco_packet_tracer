@@ -55,7 +55,7 @@ Para que Packet Tracer permita ejecutar el código sin arrojar errores de seguri
 
 ## 📂 Catálogo de Scripts Disponibles
 
-En la carpeta [`scripts/`](./scripts/) encontrarás 3 scripts independientes listos para usar según el tipo de laboratorio:
+En la carpeta [`scripts/`](./scripts/) encontrarás 4 scripts independientes listos para usar según el tipo de laboratorio:
 
 | Archivo | Caso de Uso | Características Principales |
 | :--- | :--- | :--- |
