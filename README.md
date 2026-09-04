@@ -174,3 +174,7 @@ Ahorra tiempo al diseñar y montar tu topología con estos atajos verificados:
 ## 📄 Licencia y Contribuciones
 
 Proyecto desarrollado para estudiantes de Ingeniería de Sistemas y Computación y entusiastas de redes Cisco. ¡Úsalo, compártelo con tus compañeros y adáptalo a tus propios laboratorios!
+
+### 📡 Script 5: `05_ipv4_enrutamiento_estatico.js`
+- **Uso:** Redes segmentadas con topologías complejas (Estrella, Anillo, Malla, Árbol) conectadas a **Routers con Enrutamiento Estático**.
+- **Qué hace:** Detecta automáticamente las 4 islas LAN partiendo de los Routers ($R_1, R_2, R_3, R_4$), asigna las IPs de host /26 correspondientes (`192.168.1.0/26`), inyecta el **Default Gateway exacto** en cada PC (`192.168.1.1`, `.65`, `.129`, `.193`) y limpia los rótulos eliminando copias duplicadas.
