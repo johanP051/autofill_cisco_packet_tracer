@@ -178,3 +178,12 @@ Proyecto desarrollado para estudiantes de Ingeniería de Sistemas y Computación
 ### 📡 Script 5: `05_ipv4_enrutamiento_estatico.js`
 - **Uso:** Redes segmentadas con topologías complejas (Estrella, Anillo, Malla, Árbol) conectadas a **Routers con Enrutamiento Estático**.
 - **Qué hace:** Detecta automáticamente las 4 islas LAN partiendo de los Routers ($R_1, R_2, R_3, R_4$), asigna las IPs de host /26 correspondientes (`192.168.1.0/26`), inyecta el **Default Gateway exacto** en cada PC (`192.168.1.1`, `.65`, `.129`, `.193`) y limpia los rótulos eliminando copias duplicadas.
+
+### 🌐 Script 6: `06_ipv4_topologia_pablo.js`
+- **Uso:** Topología con 4 Routers interconectados en un Anillo WAN (`192.168.50.0/26`) y 4 subredes LAN bajo la red base **`192.168.10.0/26`**.
+- **Qué hace:** 
+  - Subred 1 (Izquierda): `192.168.10.0/26` | Gateway `192.168.10.1` | Hosts `.2 - .62`
+  - Subred 2 (Arriba): `192.168.10.64/26` | Gateway `192.168.10.65` | Hosts `.66 - .126`
+  - Subred 3 (Abajo): `192.168.10.128/26` | Gateway `192.168.10.129` | Hosts `.130 - .190`
+  - Subred 4 (Derecha): `192.168.10.192/26` | Gateway `192.168.10.193` | Hosts `.194 - .254`
+- Configura automáticamente IPs, Máscaras y Default Gateways en todos los PCs sin tocar los routers.
